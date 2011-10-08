@@ -1,0 +1,58 @@
+--------------------------------------------------------------------------------
+
+DNS Server
+(c) 2010 Petr Nohejl
+
+MyDNS je jednoduchý DNS server pro OS GNU/Linux. Umí zpracovávat standardní
+dotazy typu A a PTR. Server se nastavuje a konfiguruje v konfiguračním souboru,
+který je na vstupu programu. Konfigurace se načítá při spuštění serveru.
+Konfigurační soubor obsahuje seznam rozhraní a IP adres, na kterých bude server
+naslouchat. Číslo portu, na kterém bude naslouchat. Dále obsahuje DNS tabulku
+se záznamy (DNS název, IP, TTL) a výchozí hodnoty DNS názvu, IP, TTL. Veškeré
+přístupy na server jsou zaznamenávány do logovacího souboru 'accesslog'. Více
+informací o MyDNS se dozvíte v dokumentaci.
+
+--------------------------------------------------------------------------------
+
+Název projektu:     MyDNS
+Popis:              jednoduchý DNS server
+Autor:              Petr Nohejl (xnohej00)
+OS:                 GNU/Linux
+Implementace:       C++
+Použité knihovny:   pcrecpp
+
+--------------------------------------------------------------------------------
+
+Seznam souborů projektu:
+
+    - src/mydns.h       zdrojový soubor
+    - src/mydns.cpp     zdrojový soubor
+    - src/Makefile      Makefile pro sestavení programu
+    - src/config        konfigurační soubor serveru
+    - src/testuj        testovací skript (bash) 
+    - doc/doc.pdf       dokumentace
+
+--------------------------------------------------------------------------------
+
+Použití:
+
+    ./mydns -f konfiguracni_soubor
+    ./mydns -h
+
+--------------------------------------------------------------------------------
+
+Rozšíření:
+
+    - podpora komprese DNS dotazu pro snížení velikosti odesílané zprávy
+    - zaznamenávání přístupů na server do logovacího souboru
+
+--------------------------------------------------------------------------------
+
+Testování:
+
+Projekt byl vyvíjen na OS GNU/Linux (server merlin.fit.vutbr.cz).
+Pro testování projektu slouží testovací skript 'testuj', který zkompiluje, 
+sestaví, spustí a testuje program MYDNS pomocí příkazů dig. Nakonec odstraní
+všechny vytvořené soubory a vrátí adresář s projektem do původního stavu.
+
+--------------------------------------------------------------------------------

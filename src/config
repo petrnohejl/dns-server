@@ -1,0 +1,58 @@
+#+----------------------------------------------------------+
+# TCP/IP part
+#
+# "interface" mùže být definováno IP adresami,
+# názvy daných rozhraní nebo lze použít parametr
+# "ANY", který znamená, že se bude poslouchat na
+# všech rozhraních.
+#
+# Example1:
+# interface 127.0.0.1 eth0
+# Example2:
+# interface ANY
+
+interface lo eth0
+
+#
+# "port" urèuje èíslo portu, na kterém se bude poslouchat
+
+port 5729
+
+#
+#
+# DNS part
+#
+# "defaultIP" je IP adresa, kterou odpoví DNS server
+# v pøípadì, že nezná odpovìï na daný dotaz.
+
+defaultIP 172.16.0.1
+
+#
+# "defaultDomain" je doménová adresa, kterou odpoví DNS server
+# v pøípadì, že nezná odpovìï na daný dotaz.
+
+defaultDomain defaultdomain.cz
+
+#
+# "defaultTTL" doba v sekundách po kterou je
+# defaultní záznam a záznam bez udané doby platný
+
+defaultTTL 999
+
+#
+# "DNStable" je tabulka dotazù a odpovìdí
+# Formát záznamù je
+# <DNS_jméno> <IP_adresa> [timeout]
+
+DNStable
+{
+	loopback 127.0.0.1 3600
+	www.fit.vutbr.cz 147.229.9.23 60
+	www.google.com 74.125.87.99
+	www.google.com 74.125.87.103
+	www.google.com 74.125.87.104
+	www.google.com 74.125.87.147
+}
+
+#
+#+----------------------------------------------------------+

@@ -1,0 +1,122 @@
+#! /bin/bash
+#
+# Testovaci skript pro DNS server MYDNS
+# Autor: Petr Nohejl (xnohej00)
+#
+# Testovaci skript predpoklada nastaveni konfiguracniho ze zadani projektu.
+# Nektere nize uvedene promenne jsou provazany se zdrojovym kodem,
+# nebo konfiguracnim souborem a jejich zmena by mohla zpusobit
+# nefunkcnost tohoto testovaciho skriptu.
+
+
+#PROMENNE
+FILE_CONFIG="config"	# nazev konfiguracniho souboru, tento soubor musi existovat a byt spravne nastaveny
+FILE_LOG="accesslog"	# nazev logovaciho souboru, zavisle na konstante v 'mydns.h'
+PORT="5729"	# cislo portu, zavisle na konstante 'port' v konfiguracnim souboru
+IP="127.0.0.1"	# ip adresa, na ktere jede server
+LOGIN="xnohej00"	# login studenta, pro prikaz killall
+
+
+echo "KOMPILUJI PROJEKT"
+echo "--------------------------------------------------------------------------------"
+echo "rm $FILE_LOG"
+rm $FILE_LOG
+make clean
+make
+echo ""
+echo ""
+
+echo "SPOUSTIM PROGRAM MYDNS S NAPOVEDOU"
+echo "--------------------------------------------------------------------------------"
+echo "./mydns -h"
+./mydns -h
+echo ""
+echo ""
+
+echo "TESTUJI SPUSTENI PROGRAMU S NEPLATNYMI ARGUMENTY"
+echo "--------------------------------------------------------------------------------"
+echo "./mydns -x"
+./mydns -x
+echo ""
+echo ""
+
+echo "TESTUJI SPUSTENI PROGRAMU S NEEXISTUJICIM KONFIGURACNIM SOUBOREM"
+echo "--------------------------------------------------------------------------------"
+echo "./mydns -f not-exist-file"
+./mydns -f not-exist-file
+echo ""
+echo ""
+
+echo "SPOUSTIM NA POZADI SERVER MYDNS BEZICI NA PORTU $PORT"
+echo "--------------------------------------------------------------------------------"
+echo "./mydns -f $FILE_CONFIG &"
+./mydns -f $FILE_CONFIG &
+echo ""
+echo ""
+
+echo "POSILAM NA SERVER DOTAZ TYPU A - JEDNA ODPOVED"
+echo "--------------------------------------------------------------------------------"
+echo "dig -p $PORT @$IP loopback"
+dig -p $PORT @$IP loopback
+echo ""
+echo ""
+
+echo "POSILAM NA SERVER DOTAZ TYPU A - JEDNA ODPOVED"
+echo "--------------------------------------------------------------------------------"
+echo "dig -p $PORT @$IP www.fit.vutbr.cz"
+dig -p $PORT @$IP www.fit.vutbr.cz
+echo ""
+echo ""
+
+echo "POSILAM NA SERVER DOTAZ TYPU A - VICE ODPOVEDI"
+echo "--------------------------------------------------------------------------------"
+echo "dig -p $PORT @$IP www.google.com"
+dig -p $PORT @$IP www.google.com
+echo ""
+echo ""
+
+echo "POSILAM NA SERVER DOTAZ TYPU A - DEFAULTNI ODPOVED"
+echo "--------------------------------------------------------------------------------"
+echo "dig -p $PORT @$IP not.exist.server.cz"
+dig -p $PORT @$IP not.exist.server.cz
+echo ""
+echo ""
+
+echo "POSILAM NA SERVER DOTAZ TYPU PTR"
+echo "--------------------------------------------------------------------------------"
+echo "dig -p $PORT @$IP -x 147.229.9.23"
+dig -p $PORT @$IP -x 147.229.9.23
+echo ""
+echo ""
+
+echo "POSILAM NA SERVER DOTAZ TYPU PTR"
+echo "--------------------------------------------------------------------------------"
+echo "dig -p $PORT @$IP -x 147.229.9.23"
+dig -p $PORT @$IP -x 74.125.87.99
+echo ""
+echo ""
+
+echo "POSILAM NA SERVER DOTAZ TYPU PTR - DEFAULTNI ODPOVED"
+echo "--------------------------------------------------------------------------------"
+echo "dig -p $PORT @$IP -x 1.2.3.4"
+dig -p $PORT @$IP -x 1.2.3.4
+echo ""
+echo ""
+
+echo "VYPISUJI LOGOVACI SOUBOR SERVERU"
+echo "--------------------------------------------------------------------------------"
+echo "cat $FILE_LOG"
+cat $FILE_LOG
+echo ""
+echo ""
+
+echo "UKONCUJI SERVER MYDNS A UKLIZIM SMETI"
+echo "--------------------------------------------------------------------------------"
+ps | grep mydns
+echo "killall -u $LOGIN mydns"
+killall -u $LOGIN mydns
+echo "rm $FILE_LOG"
+rm $FILE_LOG
+make clean
+echo ""
+
